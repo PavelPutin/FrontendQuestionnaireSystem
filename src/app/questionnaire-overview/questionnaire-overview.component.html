@@ -10,7 +10,7 @@
         <i class="bi bi-search"></i>
       </button>
     </form>
-    <ul class="mt-2 p-0">
+    <ul class="questionnaires mt-2 p-0">
       <li class="bg-light card p-0" *ngFor="let questionnaire of questionnaires">
         <div class="card-body">
           <h4 class="card-title text-truncate">{{questionnaire.name}}</h4>
@@ -20,6 +20,19 @@
         </div>
       </li>
     </ul>
-    <div>pagination</div>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link bi bi-arrow-left" href="#" aria-label="Previous"></a>
+        </li>
+        <li class="page-item" *ngFor="let paginationLabel of paginationLabels">
+          <a class="page-link" href="#">{{paginationLabel}}</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link bi bi-arrow-right" href="#" aria-label="Previous"></a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
