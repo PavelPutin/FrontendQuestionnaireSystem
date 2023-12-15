@@ -3,6 +3,18 @@
     <app-popular></app-popular>
   </div>
   <div class="col-8">
-
+    <form>
+      <input type="text" placeholder="Заголовок опроса" #questionnaireName>
+      <input type="text" placeholder="Имя автора" #authorName>
+      <button type="button" (click)="acceptFilter(questionnaireName.value, authorName.name)">
+        <i class="bi bi-search"></i>
+      </button>
+    </form>
+    <ul>
+      <li *ngFor="let questionnaire of questionnaires">
+        <h3>{{questionnaire.name}}</h3>
+      </li>
+    </ul>
+    <div>pagination</div>
   </div>
 </div>

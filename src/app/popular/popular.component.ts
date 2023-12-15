@@ -16,7 +16,13 @@ export class PopularComponent {
   popularQuestionnaires: QuestionnaireBrief[] = [];
   questionnaireService: QuestionnaireService = inject(QuestionnaireService);
 
-  constructor() {
+  constructor() {}
+
+  ngOnInit() {
+    this.getPopularQuestionnaires();
+  }
+
+  getPopularQuestionnaires() {
     this.questionnaireService.getPopularQuestionnaire().then((popularQuestionnaires: QuestionnaireBrief[]) => {
       this.popularQuestionnaires = popularQuestionnaires;
     })
