@@ -1,49 +1,12 @@
 <div>
   <h3>Популярные опросы</h3>
   <ul class="list-group">
-    <li class="list-group-item">
+    <li class="list-group-item" *ngFor="let questionnaire of popularQuestionnaires">
       <h4 class="text-truncate">
-        <a href="/" class="stretched-link link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Заголовок
-          опроса очень длинный</a>
+        <a href="/" class="stretched-link link-dark link-underline-opacity-0 link-underline-opacity-100-hover">{{questionnaire.name}}</a>
       </h4>
       <div>
-        <span>150</span> голосов
-      </div>
-    </li>
-    <li class="list-group-item">
-      <h4 class="text-truncate">
-        <a href="/" class="stretched-link link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Заголовок
-          опроса очень длинный</a>
-      </h4>
-      <div>
-        <span>150</span> голосов
-      </div>
-    </li>
-    <li class="list-group-item">
-      <h4 class="text-truncate">
-        <a href="/" class="stretched-link link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Заголовок
-          опроса очень длинный</a>
-      </h4>
-      <div>
-        <span>150</span> голосов
-      </div>
-    </li>
-    <li class="list-group-item">
-      <h4 class="text-truncate">
-        <a href="/" class="stretched-link link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Заголовок
-          опроса очень длинный</a>
-      </h4>
-      <div>
-        <span>150</span> голосов
-      </div>
-    </li>
-    <li class="list-group-item">
-      <h4 class="text-truncate">
-        <a href="/" class="stretched-link link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Заголовок
-          опроса очень длинный</a>
-      </h4>
-      <div>
-        <span>150</span> голосов
+        <span>{{questionnaire.answeredAmount}}</span> голосов
       </div>
     </li>
   </ul>
