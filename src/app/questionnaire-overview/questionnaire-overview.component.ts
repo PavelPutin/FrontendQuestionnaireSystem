@@ -24,14 +24,14 @@ export class QuestionnaireOverviewComponent {
   }
 
   ngOnInit() {
-    this.getQuestionnaires()
+    this.getQuestionnaires(0);
   }
 
-  getQuestionnaires(): void {
-    this.questionnaireService.getQuestionnaires().then((questionnaires: PaginatedQuestionnaires) => {
+  getQuestionnaires(pageNumber: number): void {
+    this.questionnaireService.getQuestionnaires(pageNumber).then((questionnaires: PaginatedQuestionnaires) => {
       this.questionnaires = questionnaires.briefDTOList;
       this.paginationLabels = this.updatePaginationLabels(questionnaires);
-    })
+    });
   }
 
   acceptFilter(questionnaireName: string, authorName: string) {
@@ -42,13 +42,11 @@ export class QuestionnaireOverviewComponent {
     let paginationLabels: string[] = [];
     if (questionnaires.number < 5) {
       for (let i = 1; i <= 5 && i <= questionnaires.totalPages; i++) {
-        if (i == 5 && questionnaires.totalPages > 5) {
-          paginationLabels[i - 1] = "...";
-        } else {
-          paginationLabels[i - 1] = i + '';
-        }
+        paginationLabels[i - 1] = i + '';
       }
     }
     return paginationLabels;
   }
+
+  protected readonly Number = Number;
 }
