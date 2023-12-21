@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {QuestionnaireBrief} from "./questionnaire-brief";
 import {PaginatedQuestionnaires} from "./paginated-questionnaires";
+import {Questionnaire} from "./questionnaire";
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,15 @@ export class QuestionnaireService {
 
   async getPopularQuestionnaire(): Promise<QuestionnaireBrief[]> {
     const data = await fetch(`${this.url}/popular`);
+    return await data.json() ?? [];
+  }
+
+  async getQuestionnaireById(uuid: string): Promise<Questionnaire> {
+    const data = await fetch(`${this.url}/${uuid}`, {
+      headers: {
+        "Authorization": "Basic " + btoa("qwerty:qwerty")
+      }
+    });
     return await data.json() ?? [];
   }
 }
