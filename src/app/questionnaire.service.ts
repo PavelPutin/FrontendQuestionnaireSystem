@@ -9,10 +9,17 @@ export class QuestionnaireService {
   url = 'http://localhost:8080/questionnaire'
   constructor() { }
 
-  async getQuestionnaires(pageNumber: number): Promise<PaginatedQuestionnaires> {
-    const data = await fetch(`${this.url}?` + new URLSearchParams({
-      "pageNumber": pageNumber.toString()
-    }));
+  async getQuestionnaires(pageNumber: number, questionnaireNameSearch: string | undefined, authorNameSearch: string | undefined): Promise<PaginatedQuestionnaires> {
+    const urlParams = new URLSearchParams();
+    urlParams.append("pageNumber", pageNumber.toString());
+    if (questionnaireNameSearch) {
+      urlParams.append("questionnaireNameSearch", questionnaireNameSearch);
+    }
+    if (authorNameSearch) {
+      urlParams.append("authorNameSearch", authorNameSearch);
+    }
+
+    const data = await fetch(`${this.url}?` + urlParams);
     return await data.json() ?? [];
   }
 

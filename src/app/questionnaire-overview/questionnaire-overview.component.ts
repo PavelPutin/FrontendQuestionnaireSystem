@@ -4,6 +4,7 @@ import {QuestionnaireBrief} from "../questionnaire-brief";
 import {QuestionnaireService} from "../questionnaire.service";
 import {NgForOf} from "@angular/common";
 import {PaginatedQuestionnaires} from "../paginated-questionnaires";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-questionnaire-overview',
@@ -18,6 +19,8 @@ import {PaginatedQuestionnaires} from "../paginated-questionnaires";
 export class QuestionnaireOverviewComponent {
   questionnaires: QuestionnaireBrief[] = [];
   paginationLabels: string[] = [];
+  questionnaireNameSearch: string | undefined = undefined;
+  authorNameSearch: string | undefined = undefined;
   questionnaireService: QuestionnaireService = inject(QuestionnaireService);
 
   constructor() {
@@ -28,14 +31,16 @@ export class QuestionnaireOverviewComponent {
   }
 
   getQuestionnaires(pageNumber: number): void {
-    this.questionnaireService.getQuestionnaires(pageNumber).then((questionnaires: PaginatedQuestionnaires) => {
+    this.questionnaireService.getQuestionnaires(pageNumber, this.questionnaireNameSearch, this.questionnaireNameSearch).then((questionnaires: PaginatedQuestionnaires) => {
       this.questionnaires = questionnaires.briefDTOList;
       this.paginationLabels = this.updatePaginationLabels(questionnaires);
     });
   }
 
-  acceptFilter(questionnaireName: string, authorName: string) {
-
+  acceptFilter(questionnaireNameSearch: string, authorNameSearch: string) {
+    this.questionnaireNameSearch = questionnaireNameSearch;
+    this.authorNameSearch = authorNameSearch;
+    this.getQuestionnaires(0);
   }
 
   private updatePaginationLabels(questionnaires: PaginatedQuestionnaires): string[] {
