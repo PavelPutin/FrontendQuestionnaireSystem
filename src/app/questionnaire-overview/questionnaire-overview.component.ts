@@ -4,13 +4,14 @@ import {QuestionnaireBrief} from "../questionnaire-brief";
 import {QuestionnaireService} from "../questionnaire.service";
 import {NgForOf} from "@angular/common";
 import {PaginatedQuestionnaires} from "../paginated-questionnaires";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-questionnaire-overview',
   standalone: true,
   imports: [
     PopularComponent,
+    ReactiveFormsModule,
     NgForOf
   ],
   templateUrl: './questionnaire-overview.component.html',
@@ -19,8 +20,10 @@ import {FormControl, FormGroup} from "@angular/forms";
 export class QuestionnaireOverviewComponent {
   questionnaires: QuestionnaireBrief[] = [];
   paginationLabels: string[] = [];
-  questionnaireNameSearch: string | undefined = undefined;
-  authorNameSearch: string | undefined = undefined;
+  searchFormGroup = new FormGroup({
+    questionnaireNameSearch: new FormControl(),
+    authorNameSearch: new FormControl()
+  })
   questionnaireService: QuestionnaireService = inject(QuestionnaireService);
 
   constructor() {
@@ -31,15 +34,15 @@ export class QuestionnaireOverviewComponent {
   }
 
   getQuestionnaires(pageNumber: number): void {
-    this.questionnaireService.getQuestionnaires(pageNumber, this.questionnaireNameSearch, this.questionnaireNameSearch).then((questionnaires: PaginatedQuestionnaires) => {
+    console.log(this.searchFormGroup.value.questionnaireNameSearch);
+    console.log(this.searchFormGroup.value.authorNameSearch);
+    this.questionnaireService.getQuestionnaires(pageNumber, this.searchFormGroup.value.questionnaireNameSearch, this.searchFormGroup.value.authorNameSearch).then((questionnaires: PaginatedQuestionnaires) => {
       this.questionnaires = questionnaires.briefDTOList;
       this.paginationLabels = this.updatePaginationLabels(questionnaires);
     });
   }
 
-  acceptFilter(questionnaireNameSearch: string, authorNameSearch: string) {
-    this.questionnaireNameSearch = questionnaireNameSearch;
-    this.authorNameSearch = authorNameSearch;
+  acceptFilter() {
     this.getQuestionnaires(0);
   }
 
