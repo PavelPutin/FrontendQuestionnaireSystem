@@ -5,6 +5,7 @@ import {QuestionnaireService} from "../questionnaire.service";
 import {NgForOf} from "@angular/common";
 import {PaginatedQuestionnaires} from "../paginated-questionnaires";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-questionnaire-overview',
@@ -12,7 +13,8 @@ import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
   imports: [
     PopularComponent,
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+    RouterLink
   ],
   templateUrl: './questionnaire-overview.component.html',
   styleUrl: './questionnaire-overview.component.css'
