@@ -1,12 +1,16 @@
 import {Component, inject} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {QuestionnaireService} from "../questionnaire.service";
 import {Questionnaire} from "../questionnaire";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-questionnaire-detail',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink,
+    NgForOf
+  ],
   templateUrl: './questionnaire-detail.component.html',
   styleUrl: './questionnaire-detail.component.css'
 })

@@ -1,1 +1,17 @@
-<p>questionnaire-detail works! {{questionnaire?.name}}</p>
+<section class="container">
+  <div class="row">
+    <div class="col-7 bg-light">
+      <h1>{{questionnaire?.name}}</h1>
+      <p>Автор: <a [routerLink]="['/profile', questionnaire?.authorId]">{{questionnaire?.authorName}}</a></p>
+      <p>{{questionnaire?.question}}</p>
+    </div>
+    <div class="col-5 bg-light">
+      <h2>Выберите ответ:</h2>
+      <ul>
+        <li *ngFor="let option of questionnaire?.options">
+          {{option.text}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
