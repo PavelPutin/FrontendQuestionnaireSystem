@@ -1,9 +1,9 @@
 import {Component, inject} from '@angular/core';
-import {ActivatedRoute, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {QuestionnaireService} from "../questionnaire.service";
 import {Questionnaire} from "../questionnaire";
 import {NgForOf, NgIf} from "@angular/common";
-import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-questionnaire-detail',
@@ -21,27 +21,38 @@ export class QuestionnaireDetailComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   questionnaireService: QuestionnaireService = inject(QuestionnaireService);
   questionnaire: Questionnaire | undefined;
-  hasAnswered: boolean | undefined;
+  hasAnswered: boolean;
   optionsFormGroup: FormGroup;
   formBuilder: FormBuilder = inject(FormBuilder);
   questionnaireId: string;
 
-  constructor() {
+  constructor(private router: Router) {
     this.questionnaireId = this.route.snapshot.params['id'];
     this.questionnaireService.getQuestionnaireById(this.questionnaireId).then(questionnaire => {
       this.questionnaire = questionnaire;
     });
+    this.hasAnswered = false
     this.questionnaireService.getHasUserAnsweredByQuestionnaireId(this.questionnaireId).then(result => {
-      this.hasAnswered = result.result;
+      this.hasAnswered = result.result ? result.result : false;
     });
-    this.optionsFormGroup = this.formBuilder.group({
-      options: this.formBuilder.array([])
-    });
+    if (this.questionnaire?.multiple) {
+      this.optionsFormGroup = this.formBuilder.group({
+        options: this.formBuilder.array([], Validators.required)
+      });
+    } else {
+      this.optionsFormGroup = new FormGroup<any>({
+        options: new FormControl()
+      });
+    }
   }
 
   submitVote() {
-    const selected: string[] = this.optionsFormGroup.value.options;
+    let selected: string[] | string = this.optionsFormGroup.value.options;
+    if (typeof selected === "string") {
+      selected = [selected];
+    }
     this.questionnaireService.vote(this.questionnaireId, selected);
+    this.hasAnswered = true;
   }
 
   controlOnChange(e: Event) {

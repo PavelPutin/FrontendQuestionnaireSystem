@@ -21,7 +21,10 @@
           </div>
         </div>
         <div *ngIf="!questionnaire?.multiple">
-          not multiple
+          <div *ngFor="let option of questionnaire?.options">
+            <input type="radio" id="option{{option.id}}" formControlName="options" [value]="option.id" [disabled]="hasAnswered">
+            <label for="option{{option.id}}">{{option.text}}</label>
+          </div>
         </div>
         <button type="submit" [disabled]="hasAnswered">Проголосовать</button>
       </form>
