@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {QuestionnaireBrief} from "./questionnaire-brief";
 import {PaginatedQuestionnaires} from "./paginated-questionnaires";
 import {Questionnaire} from "./questionnaire";
+import {routes} from "./app.routes";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuestionnaireService {
   url = 'http://localhost:8080/questionnaire'
+  router: Router = inject(Router);
   constructor() { }
 
   async getQuestionnaires(pageNumber: number, questionnaireNameSearch: string | undefined, authorNameSearch: string | undefined): Promise<PaginatedQuestionnaires> {
@@ -35,6 +38,9 @@ export class QuestionnaireService {
         "Authorization": "Basic " + btoa("qwerty:qwerty")
       }
     });
+    if (data.status == 404) {
+      this.router.navigate(["/details", uuid, "notfound"]).then();
+    }
     return await data.json() ?? [];
   }
 }

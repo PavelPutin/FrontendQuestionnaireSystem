@@ -4,6 +4,7 @@ import {LoginComponent} from "./login/login.component";
 import {QuestionnaireDetailComponent} from "./questionnaire-detail/questionnaire-detail.component";
 import {RegistrationComponent} from "./registration/registration.component";
 import {ProfileComponent} from "./profile/profile.component";
+import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 
 export const routes: Routes = [
   {
@@ -30,5 +31,11 @@ export const routes: Routes = [
     path: 'profile/:id',
     component: ProfileComponent,
     title: "Профиль"
+  },
+  {
+    path: '**',
+    pathMatch: 'full',
+    component: PageNotFoundComponent,
+    title: "Ресурс не найден"
   }
 ];
