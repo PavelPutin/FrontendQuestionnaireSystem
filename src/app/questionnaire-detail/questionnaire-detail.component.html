@@ -6,12 +6,25 @@
       <p>{{questionnaire?.question}}</p>
     </div>
     <div class="col-5 bg-light">
-      <h2>Выберите ответ:</h2>
-      <ul>
-        <li *ngFor="let option of questionnaire?.options">
-          {{option.text}}
-        </li>
-      </ul>
+      <h2 *ngIf="!hasAnswered">Выберите ответ:</h2>
+      <h2 *ngIf="hasAnswered">Вы уже проголосовали</h2>
+<!--      <ul>-->
+<!--        <li *ngFor="let option of questionnaire?.options">-->
+<!--          {{option.text}}-->
+<!--        </li>-->
+<!--      </ul>-->
+      <form [formGroup]="optionsFormGroup" (submit)="submitVote()">
+        <div *ngIf="questionnaire?.multiple">
+          <div *ngFor="let option of questionnaire?.options">
+            <input type="checkbox" id="option{{option.id}}" [value]="option.id" [disabled]="hasAnswered" (change)="controlOnChange($event)">
+            <label for="option{{option.id}}">{{option.text}}</label>
+          </div>
+        </div>
+        <div *ngIf="!questionnaire?.multiple">
+          not multiple
+        </div>
+        <button type="submit" [disabled]="hasAnswered">Проголосовать</button>
+      </form>
     </div>
   </div>
 </section>

@@ -4,6 +4,8 @@ import {PaginatedQuestionnaires} from "./paginated-questionnaires";
 import {Questionnaire} from "./questionnaire";
 import {routes} from "./app.routes";
 import {Router} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ import {Router} from "@angular/router";
 export class QuestionnaireService {
   url = 'http://localhost:8080/questionnaire'
   router: Router = inject(Router);
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   async getQuestionnaires(pageNumber: number, questionnaireNameSearch: string | undefined, authorNameSearch: string | undefined): Promise<PaginatedQuestionnaires> {
     const urlParams = new URLSearchParams();
@@ -42,5 +44,28 @@ export class QuestionnaireService {
       this.router.navigate(["/details", uuid, "notfound"]).then();
     }
     return await data.json() ?? [];
+  }
+
+  async getHasUserAnsweredByQuestionnaireId(uuid: string): Promise<{ result: boolean }> {
+    const data = await fetch(`${this.url}/${uuid}/hasAnswered`, {
+      headers: {
+        "Authorization": "Basic " + btoa("qwerty:qwerty")
+      }
+    });
+    if (data.status == 404) {
+      this.router.navigate(["/details", uuid, "notfound"]).then();
+    }
+    return await data.json() ?? undefined;
+  }
+
+  vote(uuid: string, optionsId: string[]): void {
+    const httpOptions = {
+      headers: {
+        "Authorization": "Basic " + btoa("qwerty:qwerty")
+      }
+    }
+    this.http.post(`${this.url}/${uuid}/vote`, {
+      "optionsId": optionsId
+    }, httpOptions).subscribe()
   }
 }
