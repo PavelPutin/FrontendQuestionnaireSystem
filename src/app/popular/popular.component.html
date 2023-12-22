@@ -3,7 +3,7 @@
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let questionnaire of popularQuestionnaires">
       <h4 class="text-truncate">
-        <a href="/" class="stretched-link link-dark link-underline-opacity-0 link-underline-opacity-100-hover">{{questionnaire.name}}</a>
+        <a [routerLink]="['/details', questionnaire.id]" class="stretched-link link-dark link-underline-opacity-0 link-underline-opacity-100-hover">{{questionnaire.name}}</a>
       </h4>
       <div>
         <!-- todo: добавить склонение для "голосов" -->
