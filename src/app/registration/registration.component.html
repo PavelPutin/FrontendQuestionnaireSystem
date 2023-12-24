@@ -1,1 +1,19 @@
-<p>registration works!</p>
+<div class="row justify-content-center m-4">
+  <div class="text-bg-light col-6 d-flex flex-column align-items-center p-3">
+    <h2>Регистрация</h2>
+    <h3>
+      <a href="/">Questionnaire system :)</a>
+    </h3>
+    <form [formGroup]="registrationForm" class="d-flex flex-column align-items-center">
+      <div>
+        <input class="mb-2" type="text" formControlName="username" placeholder="Имя пользователя">
+      </div>
+      <div>
+        <input class="mb-2" type="password" formControlName="password" placeholder="Пароль">
+      </div>
+      <div>
+        <input class="btn btn-light border border-primary" type="submit" value="Регистрация">
+      </div>
+    </form>
+  </div>
+</div>
