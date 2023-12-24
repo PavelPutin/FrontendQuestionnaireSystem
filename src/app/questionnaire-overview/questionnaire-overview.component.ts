@@ -6,6 +6,8 @@ import {NgForOf} from "@angular/common";
 import {PaginatedQuestionnaires} from "../paginated-questionnaires";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
+import {CookieService} from "../cookie.service";
+
 
 @Component({
   selector: 'app-questionnaire-overview',
@@ -27,18 +29,35 @@ export class QuestionnaireOverviewComponent {
     authorNameSearch: new FormControl()
   })
   questionnaireService: QuestionnaireService = inject(QuestionnaireService);
+  private cookieService: CookieService = inject(CookieService);
 
   constructor() {
   }
 
   ngOnInit() {
-    this.getQuestionnaires(0);
+    let pageNumber = Number(this.cookieService.getCookie("pageNumber"));
+    if (isNaN(pageNumber)) {
+      pageNumber = 0;
+      this.cookieService.setCookie("pageNumber", "0");
+    }
+
+    this.setControlValueFromCookie("questionnaireNameSearch");
+    this.setControlValueFromCookie("authorNameSearch");
+
+    this.getQuestionnaires(pageNumber);
   }
 
   getQuestionnaires(pageNumber: number): void {
-    console.log(this.searchFormGroup.value.questionnaireNameSearch);
-    console.log(this.searchFormGroup.value.authorNameSearch);
-    this.questionnaireService.getQuestionnaires(pageNumber, this.searchFormGroup.value.questionnaireNameSearch, this.searchFormGroup.value.authorNameSearch).then((questionnaires: PaginatedQuestionnaires) => {
+    this.cookieService.setCookie("pageNumber", pageNumber.toString());
+
+    this.updateCookieByControlValue("questionnaireNameSearch");
+    this.updateCookieByControlValue("authorNameSearch");
+
+    this.questionnaireService.getQuestionnaires(
+      pageNumber,
+      this.searchFormGroup.value.questionnaireNameSearch,
+      this.searchFormGroup.value.authorNameSearch
+    ).then((questionnaires: PaginatedQuestionnaires) => {
       this.questionnaires = questionnaires.briefDTOList;
       this.paginationLabels = this.updatePaginationLabels(questionnaires);
     });
@@ -59,4 +78,21 @@ export class QuestionnaireOverviewComponent {
   }
 
   protected readonly Number = Number;
+
+  private setControlValueFromCookie(formControlName: string) {
+    if (typeof this.cookieService.getCookie(formControlName) !== "undefined") {
+      // @ts-ignore
+      this.searchFormGroup.controls[formControlName].setValue(this.cookieService.getCookie(formControlName));
+    }
+  }
+
+  private updateCookieByControlValue(formControlName: string) {
+    // @ts-ignore
+    if (this.searchFormGroup.value[formControlName] !== null) {
+      // @ts-ignore
+      this.cookieService.setCookie(formControlName, this.searchFormGroup.value[formControlName]);
+    } else {
+      this.cookieService.deleteCookie(formControlName);
+    }
+  }
 }
