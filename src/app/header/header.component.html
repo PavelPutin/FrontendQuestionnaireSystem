@@ -2,8 +2,11 @@
   <div class="logo">
     <a [routerLink]="['/']" class="align-middle link-light link-underline-none link-underline-opacity-0">Questionnaire system :)</a>
   </div>
-  <div class="d-flex justify-content-end">
+  <div *ngIf="!authenticationService.hasAuthenticated" class="d-flex justify-content-end">
     <a [routerLink]="['/registration']" class="btn btn-light">Регистрация</a>
     <a [routerLink]="['/login']" class="ms-3 btn btn-light">Вход</a>
+  </div>
+  <div *ngIf="authenticationService.hasAuthenticated">
+    <a [routerLink]="['/profile', authenticationService.loggedInUser?.id]" class="btn btn-light">Профиль</a>
   </div>
 </header>

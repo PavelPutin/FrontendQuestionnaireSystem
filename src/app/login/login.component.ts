@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AuthenticationService} from "../authentication.service";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
@@ -7,7 +7,9 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [
+    ReactiveFormsModule
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -22,12 +24,11 @@ export class LoginComponent {
   router: Router = inject(Router);
 
   login() {
-    console.log(this.loginForm.value.username);
-    console.log(this.loginForm.value.password);
-    this.authenticationService.authenticate({
-      username: this.loginForm.value.username ?? '', password: this.loginForm.value.password ?? ''}, () => {
-      this.router.navigateByUrl("/").then(v => {console.log(v)});
-    });
-    return false;
+    localStorage.setItem("username", this.loginForm.value.username);
+    localStorage.setItem("password", this.loginForm.value.password);
+    this.authenticationService.authenticate();
+    if (this.authenticationService.hasAuthenticated) {
+      this.router.navigateByUrl("/");
+    }
   }
 }
