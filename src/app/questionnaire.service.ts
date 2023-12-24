@@ -6,6 +6,7 @@ import {routes} from "./app.routes";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {AuthenticationService} from "./authentication.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import {Observable} from "rxjs";
 export class QuestionnaireService {
   url = 'http://localhost:8080/questionnaire'
   router: Router = inject(Router);
+  authenticationService: AuthenticationService = inject(AuthenticationService);
   constructor(private http: HttpClient) { }
 
   async getQuestionnaires(pageNumber: number, questionnaireNameSearch: string | undefined, authorNameSearch: string | undefined): Promise<PaginatedQuestionnaires> {
@@ -36,9 +38,7 @@ export class QuestionnaireService {
 
   async getQuestionnaireById(uuid: string): Promise<Questionnaire> {
     const data = await fetch(`${this.url}/${uuid}`, {
-      headers: {
-        "Authorization": "Basic " + btoa("qwerty:qwerty")
-      }
+      headers: this.authenticationService.authorizationHeader
     });
     if (data.status == 404) {
       this.router.navigate(["/details", uuid, "notfound"]).then();
@@ -48,9 +48,7 @@ export class QuestionnaireService {
 
   async getHasUserAnsweredByQuestionnaireId(uuid: string): Promise<{ result: boolean }> {
     const data = await fetch(`${this.url}/${uuid}/hasAnswered`, {
-      headers: {
-        "Authorization": "Basic " + btoa("qwerty:qwerty")
-      }
+      headers: this.authenticationService.authorizationHeader
     });
     if (data.status == 404) {
       this.router.navigate(["/details", uuid, "notfound"]).then();

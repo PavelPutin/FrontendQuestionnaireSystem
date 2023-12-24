@@ -56,15 +56,16 @@ export class QuestionnaireDetailComponent {
   }
 
   controlOnChange(e: Event) {
-    const options: FormArray = this.optionsFormGroup.get('options') as FormArray;
+    const optionsArray: FormArray = this.optionsFormGroup.get('options') as FormArray;
+    console.log(optionsArray)
     // @ts-ignore
     if (e.target.checked) {
       // @ts-ignore
-      options.push(new FormControl(e.target.value));
+      optionsArray.push(new FormControl(e.target.value));
     } else {
       // @ts-ignore
       const index = options.controls.findIndex(option => option.value === e.target.value);
-      options.removeAt(index);
+      optionsArray.removeAt(index);
     }
   }
 }
