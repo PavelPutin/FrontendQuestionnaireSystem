@@ -27,23 +27,25 @@ export class QuestionnaireDetailComponent {
   questionnaireId: string;
 
   constructor(private router: Router) {
+    this.optionsFormGroup = new FormGroup<any>({});
     this.questionnaireId = this.route.snapshot.params['id'];
     this.questionnaireService.getQuestionnaireById(this.questionnaireId).then(questionnaire => {
       this.questionnaire = questionnaire;
+      console.log(this.questionnaire?.multiple)
+      if (this.questionnaire?.multiple) {
+        this.optionsFormGroup = this.formBuilder.group({
+          options: this.formBuilder.array([], Validators.required)
+        });
+      } else {
+        this.optionsFormGroup = new FormGroup<any>({
+          options: new FormControl()
+        });
+      }
     });
     this.hasAnswered = false
     this.questionnaireService.getHasUserAnsweredByQuestionnaireId(this.questionnaireId).then(result => {
       this.hasAnswered = result.result ? result.result : false;
     });
-    if (this.questionnaire?.multiple) {
-      this.optionsFormGroup = this.formBuilder.group({
-        options: this.formBuilder.array([], Validators.required)
-      });
-    } else {
-      this.optionsFormGroup = new FormGroup<any>({
-        options: new FormControl()
-      });
-    }
   }
 
   submitVote() {
@@ -57,7 +59,6 @@ export class QuestionnaireDetailComponent {
 
   controlOnChange(e: Event) {
     const optionsArray: FormArray = this.optionsFormGroup.get('options') as FormArray;
-    console.log(optionsArray)
     // @ts-ignore
     if (e.target.checked) {
       // @ts-ignore
