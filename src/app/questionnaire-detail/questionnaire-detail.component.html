@@ -22,7 +22,7 @@
         </div>
         <div *ngIf="!questionnaire?.multiple">
           <div *ngFor="let option of questionnaire?.options">
-            <input type="radio" id="option{{option.id}}" formControlName="options" [value]="option.id" [disabled]="hasAnswered">
+            <input type="radio" id="option{{option.id}}" formControlName="options" [value]="option.id">
             <label for="option{{option.id}}">{{option.text}}</label>
           </div>
         </div>

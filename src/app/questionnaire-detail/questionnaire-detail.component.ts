@@ -40,6 +40,9 @@ export class QuestionnaireDetailComponent {
         this.optionsFormGroup = new FormGroup<any>({
           options: new FormControl()
         });
+        if (this.hasAnswered) {
+          this.optionsFormGroup.controls["options"].disable();
+        }
       }
     });
     this.hasAnswered = false
