@@ -8,11 +8,6 @@
     <div class="col-5 bg-light">
       <h2 *ngIf="!hasAnswered">Выберите ответ:</h2>
       <h2 *ngIf="hasAnswered">Вы уже проголосовали</h2>
-<!--      <ul>-->
-<!--        <li *ngFor="let option of questionnaire?.options">-->
-<!--          {{option.text}}-->
-<!--        </li>-->
-<!--      </ul>-->
       <form [formGroup]="optionsFormGroup" (submit)="submitVote()">
         <div *ngIf="questionnaire?.multiple">
           <div *ngFor="let option of questionnaire?.options">
