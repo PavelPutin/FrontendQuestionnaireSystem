@@ -1,20 +1,26 @@
 import {Component, inject} from '@angular/core';
 import {AuthenticationService} from "../authentication.service";
 import {User} from "../user";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {UserService} from "../user.service";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 import {CountryService} from "../country.service";
 import {Country} from "../country";
 import {tap} from "rxjs";
+import {Questionnaire} from "../questionnaire";
+import {QuestionnaireService} from "../questionnaire.service";
+import {QuestionnaireBrief} from "../questionnaire-brief";
+import {PaginatedQuestionnaires} from "../paginated-questionnaires";
+import {CookieService} from "../cookie.service";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+    RouterLink
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -45,6 +51,10 @@ export class ProfileComponent {
     country: new FormControl()
   });
   isEditing = false;
+  questionnaires: QuestionnaireBrief[] = [];
+  questionnaireService: QuestionnaireService = inject(QuestionnaireService);
+  cookieService: CookieService = inject(CookieService);
+  paginationLabels: string[] = [];
 
   constructor(private userService: UserService) {
     let userId = this.route.snapshot.params['id'];
@@ -62,6 +72,26 @@ export class ProfileComponent {
     this.countryService.getCountries().subscribe(countries => {
       this.countries = countries;
     })
+
+    let pageNumber = Number(this.cookieService.getCookie("profilePageNumber"));
+    if (isNaN(pageNumber)) {
+      pageNumber = 0;
+      this.cookieService.setCookie("profilePageNumber", "0");
+    }
+
+    this.getQuestionnaires(pageNumber);
+  }
+
+  getQuestionnaires(pageNumber: number) {
+    this.cookieService.setCookie("profilePageNumber", pageNumber.toString());
+    this.questionnaireService.getQuestionnaires(
+      pageNumber,
+      undefined,
+      this.user?.username
+    ).then((questionnaires: PaginatedQuestionnaires) => {
+      this.questionnaires = questionnaires.briefDTOList;
+      this.paginationLabels = this.updatePaginationLabels(questionnaires);
+    });
   }
 
   startEditing() {
@@ -93,4 +123,16 @@ export class ProfileComponent {
       }).subscribe();
     }
   }
+
+  private updatePaginationLabels(questionnaires: PaginatedQuestionnaires): string[] {
+    let paginationLabels: string[] = [];
+    if (questionnaires.number < 5) {
+      for (let i = 1; i <= 5 && i <= questionnaires.totalPages; i++) {
+        paginationLabels[i - 1] = i + '';
+      }
+    }
+    return paginationLabels;
+  }
+
+  protected readonly Number = Number;
 }
