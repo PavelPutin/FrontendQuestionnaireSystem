@@ -38,6 +38,14 @@ export class AuthenticationService {
     }
   }
 
+  logout() {
+    this.http.post("http://localhost:8080/auth/logout", {}, {headers: this.authorizationHeader}).subscribe();
+    localStorage.removeItem("username");
+    localStorage.removeItem("password");
+    this.hasAuthenticated = false;
+    this.router.navigateByUrl("/login").then();
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);

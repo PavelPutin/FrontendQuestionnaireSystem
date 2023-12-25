@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {AuthenticationService} from "../authentication.service";
 import {NgIf} from "@angular/common";
 
@@ -15,4 +15,11 @@ import {NgIf} from "@angular/common";
 })
 export class HeaderComponent {
   authenticationService: AuthenticationService = inject(AuthenticationService);
+
+  constructor(private router: Router) {
+  }
+
+  logout() {
+    this.authenticationService.logout();
+  }
 }
