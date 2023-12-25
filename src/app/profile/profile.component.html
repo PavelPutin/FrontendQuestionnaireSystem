@@ -2,10 +2,12 @@
   <div class="row">
     <div class="col-5 bg-light">
       <h1>{{user?.username}}</h1>
-      <p>Возраст (полных лет): {{user?.age}}</p>
-      <p>Пол: {{user?.gender == 'male' ? 'мужской' : 'женский'}}</p>
-      <p>Семейное положение: {{maritalStatus}}</p>
-      <p>Страна: {{user?.country?.value}}</p>
+      <form>
+        <p>Возраст (полных лет): {{user?.age}}</p>
+        <p>Пол: {{user?.gender == 'male' ? 'мужской' : 'женский'}}</p>
+        <p>Семейное положение: {{maritalStatus}}</p>
+        <p>Страна: {{user?.country?.value}}</p>
+      </form>
     </div>
   </div>
 </div>
