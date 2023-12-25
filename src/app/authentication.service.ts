@@ -11,6 +11,7 @@ export class AuthenticationService {
   hasAuthenticated: boolean = false;
   loggedInUser: User | undefined;
   authorizationHeader: {authorization: string} | undefined = undefined;
+  url = "http://localhost:8080/auth/login";
 
   constructor(private http: HttpClient, private router: Router) {
     this.authenticate();
@@ -20,16 +21,21 @@ export class AuthenticationService {
     const username = localStorage.getItem("username");
     const password = localStorage.getItem("password");
 
-    this.authorizationHeader = {authorization: "Basic " + btoa(username + ":" + password)}
-
-    const header = new HttpHeaders(this.authorizationHeader);
+    const header = new HttpHeaders();
     header.append("Content-Type", "application/json");
 
-    this.http.post<User>("http://localhost:8080/auth/login", {username: username, password: password}, {headers: header})
-      .pipe(
-        tap(_ => this.hasAuthenticated = true),
-        catchError(this.handleError<any>("login"))
-      ).subscribe(user => this.loggedInUser = user);
+    if (username !== null && password !== null) {
+      this.http.post<User>(this.url, {username: username, password: password}, {headers: header})
+        .pipe(
+          tap(_ => {
+            this.hasAuthenticated = true;
+            this.authorizationHeader = {authorization: "Basic " + btoa(username + ":" + password)}
+          }),
+          catchError(this.handleError<any>("login"))
+        ).subscribe(user => this.loggedInUser = user);
+    } else {
+      this.hasAuthenticated = false;
+    }
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
