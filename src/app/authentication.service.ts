@@ -17,7 +17,7 @@ export class AuthenticationService {
     this.authenticate();
   }
 
-  authenticate() {
+  authenticate(redirect?: string) {
     const username = localStorage.getItem("username");
     const password = localStorage.getItem("password");
 
@@ -29,7 +29,10 @@ export class AuthenticationService {
         .pipe(
           tap(_ => {
             this.hasAuthenticated = true;
-            this.authorizationHeader = {authorization: "Basic " + btoa(username + ":" + password)}
+            this.authorizationHeader = {authorization: "Basic " + btoa(username + ":" + password)};
+            if (typeof redirect !== "undefined") {
+              this.router.navigateByUrl(redirect).then();
+            }
           }),
           catchError(this.handleError<any>("login"))
         ).subscribe(user => this.loggedInUser = user);

@@ -26,9 +26,6 @@ export class LoginComponent {
   login() {
     localStorage.setItem("username", this.loginForm.value.username);
     localStorage.setItem("password", this.loginForm.value.password);
-    this.authenticationService.authenticate();
-    if (this.authenticationService.hasAuthenticated) {
-      this.router.navigateByUrl("/");
-    }
+    this.authenticationService.authenticate("/");
   }
 }
