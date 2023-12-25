@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {RegistrationData} from "./registration/registration-data";
+import {RegistrationData} from "./registration-data";
 import {HttpClient} from "@angular/common/http";
 import {catchError, Observable, of, tap} from "rxjs";
 import {AuthenticationService} from "./authentication.service";

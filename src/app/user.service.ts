@@ -18,4 +18,10 @@ export class UserService {
     console.log(this.authenticationService.hasAuthenticated);
     return this.http.get<User>(`${this.url}/${uuid}`, {headers: this.authenticationService.authorizationHeader});
   }
+
+  updateUser(uuid: string, updatedData: any): Observable<any> {
+    return this.http.put(`${this.url}/${uuid}`, updatedData, {
+      headers: this.authenticationService.authorizationHeader
+    });
+  }
 }

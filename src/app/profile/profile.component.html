@@ -2,11 +2,54 @@
   <div class="row">
     <div class="col-5 bg-light">
       <h1>{{user?.username}}</h1>
-      <form>
+      <div [hidden]="isEditing">
         <p>Возраст (полных лет): {{user?.age}}</p>
         <p>Пол: {{user?.gender == 'male' ? 'мужской' : 'женский'}}</p>
         <p>Семейное положение: {{maritalStatus}}</p>
         <p>Страна: {{user?.country?.value}}</p>
+        <button type="button" class="btn btn-outline-info" (click)="startEditing()">Изменить данные</button>
+      </div>
+
+      <form [formGroup]="editProfileForm" [hidden]="!isEditing" (submit)="submitUpdate()">
+        <div>
+          <label for="age">Возраст:</label>
+          <input type="number" formControlName="age" id="age" min="1" required>
+        </div>
+        <fieldset>
+          <legend>Пол:</legend>
+          <div>
+            <input type="radio" formControlName="gender" id="female" value="female" required>
+            <label for="female">Женский</label>
+
+            <input type="radio" formControlName="gender" id="male" value="male" required>
+            <label for="male">Мужской</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Семейное положение:</legend>
+          <div>
+            <input type="radio" formControlName="maritalStatus" id="married" value="married" required>
+            <label for="married">Замужем</label>
+
+            <input type="radio" formControlName="maritalStatus" id="divorced" value="divorced" required>
+            <label for="divorced">Разведён</label>
+
+            <input type="radio" formControlName="maritalStatus" id="was_not_married" value="was_not_married" required>
+            <label for="was_not_married">Не был женат</label>
+          </div>
+        </fieldset>
+        <div>
+          <div>Страна проживания:</div>
+          <select formControlName="country" id="country">
+            <option *ngFor="let country of countries" value="{{country.id}}">
+              {{country.value}}
+            </option>
+          </select>
+        </div>
+        <div>
+          <input class="btn btn-light border border-primary" type="submit" value="Обновить данные">
+          <input class="btn btn-light border border-danger ms-3" type="button" value="Отмена" (click)="cancelEditing()">
+        </div>
       </form>
     </div>
   </div>
