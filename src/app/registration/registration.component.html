@@ -4,7 +4,7 @@
     <h3>
       <a href="/">Questionnaire system :)</a>
     </h3>
-    <form [formGroup]="registrationForm" class="d-flex flex-column align-items-center">
+    <form [formGroup]="registrationForm" (submit)="submitRegistration()" class="d-flex flex-column align-items-center">
       <div>
         <label for="username">Имя пользователя:</label>
         <input class="mb-2" type="text" id="username" formControlName="username" placeholder="Имя пользователя" required>
@@ -15,34 +15,34 @@
       </div>
       <div>
         <label for="age">Возраст:</label>
-        <input type="number" formControlName="age" id="age" min="1">
+        <input type="number" formControlName="age" id="age" min="1" required>
       </div>
       <fieldset>
         <legend>Пол:</legend>
         <div>
-          <input type="radio" formControlName="gender" id="female" value="female">
+          <input type="radio" formControlName="gender" id="female" value="female" required>
           <label for="female">Женский</label>
 
-          <input type="radio" formControlName="gender" id="male" value="female">
-          <label for="female">Мужской</label>
+          <input type="radio" formControlName="gender" id="male" value="male" required>
+          <label for="male">Мужской</label>
         </div>
       </fieldset>
       <fieldset>
         <legend>Семейное положение:</legend>
         <div>
-          <input type="radio" formControlName="maritalStatus" id="married" value="female">
-          <label for="female">Замужем</label>
+          <input type="radio" formControlName="maritalStatus" id="married" value="married" required>
+          <label for="married">Замужем</label>
 
-          <input type="radio" formControlName="maritalStatus" id="divorced" value="female">
-          <label for="female">Разведён</label>
+          <input type="radio" formControlName="maritalStatus" id="divorced" value="divorced" required>
+          <label for="divorced">Разведён</label>
 
-          <input type="radio" formControlName="maritalStatus" id="was_not_married" value="female">
-          <label for="female">Не был женат</label>
+          <input type="radio" formControlName="maritalStatus" id="was_not_married" value="was_not_married" required>
+          <label for="was_not_married">Не был женат</label>
         </div>
       </fieldset>
       <div>
         <div>Страна проживания:</div>
-        <select name="country" id="country">
+        <select formControlName="country" id="country">
           <option *ngFor="let country of countries" value="{{country.id}}">
             {{country.value}}
           </option>
