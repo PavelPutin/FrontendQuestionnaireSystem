@@ -58,8 +58,10 @@ export class QuestionnaireDetailComponent {
     if (typeof selected === "string") {
       selected = [selected];
     }
-    this.questionnaireService.vote(this.questionnaireId, selected);
-    this.hasAnswered = true;
+    this.questionnaireService.vote(this.questionnaireId, selected).subscribe(_ => {
+      this.hasAnswered = true;
+    })
+
   }
 
   controlOnChange(e: Event) {

@@ -56,14 +56,14 @@ export class QuestionnaireService {
     return await data.json() ?? undefined;
   }
 
-  vote(uuid: string, optionsId: string[]): void {
+  vote(uuid: string, optionsId: string[]) {
     const httpOptions = {
       headers: {
         "Authorization": "Basic " + btoa("qwerty:qwerty")
       }
     }
-    this.http.post(`${this.url}/${uuid}/vote`, {
+    return this.http.post(`${this.url}/${uuid}/vote`, {
       "optionsId": optionsId
-    }, httpOptions).subscribe()
+    }, httpOptions);
   }
 }
