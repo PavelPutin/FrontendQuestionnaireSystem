@@ -13,6 +13,7 @@ import {QuestionnaireService} from "../questionnaire.service";
 import {QuestionnaireBrief} from "../questionnaire-brief";
 import {PaginatedQuestionnaires} from "../paginated-questionnaires";
 import {CookieService} from "../cookie.service";
+import {QuestionnaireCreationComponent} from "../questionnaire-creation/questionnaire-creation.component";
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +22,8 @@ import {CookieService} from "../cookie.service";
     ReactiveFormsModule,
     NgForOf,
     RouterLink,
-    NgIf
+    NgIf,
+    QuestionnaireCreationComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -59,6 +61,7 @@ export class ProfileComponent {
   questionnaires: QuestionnaireBrief[] = [];
   selected: Questionnaire | undefined;
   paginationLabels: string[] = [];
+  creation = false;
 
   constructor(private userService: UserService) {
     let userId = this.route.snapshot.params['id'];
@@ -151,6 +154,11 @@ export class ProfileComponent {
     this.questionnaireService.getQuestionnaireById(questionnaire.id).then(result => {
       this.selected = result;
     })
+  }
+
+  startCreation() {
+    this.creation = true;
+    this.selected = undefined;
   }
 
   private updatePaginationLabels(questionnaires: PaginatedQuestionnaires): string[] {

@@ -80,22 +80,30 @@
             </li>
           </ul>
         </nav>
+
+        <div class="d-flex justify-content-center">
+          <button type="button" class="btn btn-outline-success" (click)="startCreation()">Создать анкету</button>
+        </div>
       </div>
     </div>
 
     <div class="col-7 bg-light">
-      <p *ngIf="!selected">
-        Выберите анкету
-      </p>
-      <div *ngIf="selected">
-        <h2>{{selected?.name}}</h2>
-        <p>{{selected?.question}}</p>
-        <ul>
-          <li *ngFor="let option of selected?.options">
-            <b>{{option?.text}}</b>: <i>Проголосовало</i> {{option?.choicesAmount}}
-          </li>
-        </ul>
+      <div *ngIf="!creation">
+        <p *ngIf="!selected">
+          Выберите анкету
+        </p>
+        <div *ngIf="selected">
+          <h2>{{selected?.name}}</h2>
+          <p>{{selected?.question}}</p>
+          <ul>
+            <li *ngFor="let option of selected?.options">
+              <b>{{option?.text}}</b>: <i>Проголосовало</i> {{option?.choicesAmount}}
+            </li>
+          </ul>
+        </div>
       </div>
+
+      <app-questionnaire-creation *ngIf="creation"></app-questionnaire-creation>
     </div>
   </div>
 </div>
