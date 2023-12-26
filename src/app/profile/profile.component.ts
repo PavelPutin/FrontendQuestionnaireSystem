@@ -7,7 +7,7 @@ import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 import {CountryService} from "../country.service";
 import {Country} from "../country";
-import {tap} from "rxjs";
+import {catchError, Observable, of, tap} from "rxjs";
 import {Questionnaire} from "../questionnaire";
 import {QuestionnaireService} from "../questionnaire.service";
 import {QuestionnaireBrief} from "../questionnaire-brief";
@@ -29,6 +29,10 @@ export class ProfileComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   router: Router = inject(Router);
   countryService: CountryService = inject(CountryService);
+  questionnaireService: QuestionnaireService = inject(QuestionnaireService);
+  cookieService: CookieService = inject(CookieService);
+  auth: AuthenticationService = inject(AuthenticationService);
+
   countries: Country[] = [];
   user: User | undefined;
   maritalStatus: string = "";
@@ -52,34 +56,34 @@ export class ProfileComponent {
   });
   isEditing = false;
   questionnaires: QuestionnaireBrief[] = [];
-  questionnaireService: QuestionnaireService = inject(QuestionnaireService);
-  cookieService: CookieService = inject(CookieService);
   paginationLabels: string[] = [];
 
   constructor(private userService: UserService) {
     let userId = this.route.snapshot.params['id'];
-    this.userService.getById(userId).subscribe(user => {
-      this.user = user;
-      if (typeof user !== "undefined") {
-        // @ts-ignore
-        this.maritalStatus = this.internalizationMaritalStatus[user.gender][user.maritalStatus];
-        this.setDefaultFormControlsValue();
-      }
-    });
+    // this.userService.getById(userId).subscribe(user => {
+    //   this.user = user;
+    //   if (typeof user !== "undefined") {
+    //     // @ts-ignore
+    //     this.maritalStatus = this.internalizationMaritalStatus[user.gender][user.maritalStatus];
+    //     this.setDefaultFormControlsValue();
+    //   }
+    // });
   }
 
   ngOnInit() {
-    this.countryService.getCountries().subscribe(countries => {
-      this.countries = countries;
-    })
+    this.auth.authenticate()
+      .pipe<User | undefined>(
+        catchError(this.handleError("open profile", undefined))
+      ).subscribe(user => {
+        this.user = user;
 
-    let pageNumber = Number(this.cookieService.getCookie("profilePageNumber"));
-    if (isNaN(pageNumber)) {
-      pageNumber = 0;
-      this.cookieService.setCookie("profilePageNumber", "0");
-    }
+        let pageNumber = this.setPageNumber();
+        this.getQuestionnaires(pageNumber);
 
-    this.getQuestionnaires(pageNumber);
+        this.countryService.getCountries().subscribe(countries => {
+          this.countries = countries;
+        })
+    });
   }
 
   getQuestionnaires(pageNumber: number) {
@@ -113,14 +117,17 @@ export class ProfileComponent {
   }
 
   submitUpdate() {
-    this.isEditing = false;
     if (typeof this.user !== "undefined") {
       this.userService.updateUser(this.user.id, {
         age: Number(this.editProfileForm.value.age),
         gender: this.editProfileForm.value.gender,
         maritalStatus: this.editProfileForm.value.maritalStatus,
         country: this.editProfileForm.value.country
-      }).subscribe();
+      }).subscribe(user => {
+        this.user = user;
+        this.isEditing = false;
+        this.setDefaultFormControlsValue();
+      });
     }
   }
 
@@ -135,4 +142,20 @@ export class ProfileComponent {
   }
 
   protected readonly Number = Number;
+
+  private setPageNumber(): number {
+    let pageNumber = Number(this.cookieService.getCookie("profilePageNumber"));
+    if (isNaN(pageNumber)) {
+      pageNumber = 0;
+      this.cookieService.setCookie("profilePageNumber", "0");
+    }
+    return pageNumber;
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      this.router.navigateByUrl("/login").then();
+      return of(result as T);
+    }
+  }
 }

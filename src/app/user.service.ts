@@ -18,7 +18,7 @@ export class UserService {
     return this.http.get<User>(`${this.url}/${uuid}`, {headers: this.auth.getHeader()});
   }
 
-  updateUser(uuid: string, updatedData: any): Observable<any> {
-    return this.http.put(`${this.url}/${uuid}`, updatedData, {headers: this.auth.getHeader()});
+  updateUser(uuid: string, updatedData: any): Observable<User> {
+    return this.http.put<User>(`${this.url}/${uuid}`, updatedData, {headers: this.auth.getHeader()});
   }
 }
