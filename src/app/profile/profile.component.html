@@ -57,9 +57,9 @@
       <div class="bg-light mt-4">
         <h2>Ваши опросы</h2>
         <ul class="list-group">
-          <li class="list-group-item" *ngFor="let questionnaire of questionnaires">
+          <li class="list-group-item" *ngFor="let questionnaire of questionnaires" (click)="select(questionnaire)">
             <h4 class="text-truncate">
-              <a [routerLink]="['/details', questionnaire.id]" class="stretched-link link-dark link-underline-opacity-0 link-underline-opacity-100-hover">{{questionnaire.name}}</a>
+              {{questionnaire.name}}
             </h4>
             <div>
               <!-- todo: добавить склонение для "голосов" -->
@@ -80,6 +80,21 @@
             </li>
           </ul>
         </nav>
+      </div>
+    </div>
+
+    <div class="col-7 bg-light">
+      <p *ngIf="!selected">
+        Выберите анкету
+      </p>
+      <div *ngIf="selected">
+        <h2>{{selected?.name}}</h2>
+        <p>{{selected?.question}}</p>
+        <ul>
+          <li *ngFor="let option of selected?.options">
+            <b>{{option?.text}}</b>: <i>Проголосовало</i> {{option?.choicesAmount}}
+          </li>
+        </ul>
       </div>
     </div>
   </div>

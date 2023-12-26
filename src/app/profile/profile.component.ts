@@ -4,7 +4,7 @@ import {User} from "../user";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {UserService} from "../user.service";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {CountryService} from "../country.service";
 import {Country} from "../country";
 import {catchError, Observable, of, tap} from "rxjs";
@@ -20,7 +20,8 @@ import {CookieService} from "../cookie.service";
   imports: [
     ReactiveFormsModule,
     NgForOf,
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -56,6 +57,7 @@ export class ProfileComponent {
   });
   isEditing = false;
   questionnaires: QuestionnaireBrief[] = [];
+  selected: Questionnaire | undefined;
   paginationLabels: string[] = [];
 
   constructor(private userService: UserService) {
@@ -143,6 +145,12 @@ export class ProfileComponent {
           });
       });
     }
+  }
+
+  select(questionnaire: QuestionnaireBrief) {
+    this.questionnaireService.getQuestionnaireById(questionnaire.id).then(result => {
+      this.selected = result;
+    })
   }
 
   private updatePaginationLabels(questionnaires: PaginatedQuestionnaires): string[] {
