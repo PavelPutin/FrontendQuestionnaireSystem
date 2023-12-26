@@ -64,9 +64,7 @@ export class QuestionnaireService {
 
   vote(uuid: string, optionsId: string[]) {
     const httpOptions = {
-      headers: {
-        "Authorization": "Basic " + btoa("qwerty:qwerty")
-      }
+      headers: this.auth.getHeader()
     }
     return this.http.post(`${this.url}/${uuid}/vote`, {
       "optionsId": optionsId

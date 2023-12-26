@@ -40,7 +40,7 @@ export class QuestionnaireDetailComponent {
       .pipe(
         tap(_ => {
           this.questionnaireService.getHasUserAnsweredByQuestionnaireId(this.questionnaireId).then(result => {
-            this.hasAnswered = result.result ? result.result : false;
+            this.hasAnswered = result.result
             this.questionnaireService.getQuestionnaireById(this.questionnaireId).then(questionnaire => {
               this.questionnaire = questionnaire;
               if (this.questionnaire?.multiple) {
