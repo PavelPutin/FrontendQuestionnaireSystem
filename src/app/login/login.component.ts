@@ -29,7 +29,10 @@ export class LoginComponent {
     localStorage.setItem("password", this.loginForm.value.password);
     this.auth.authenticate()
       .pipe(
-        tap(_ => this.router.navigateByUrl("/").then()),
+        tap(_ => {
+          console.log("login")
+          this.router.navigateByUrl("/").then()
+        }),
         catchError(this.handleError("login"))
       ).subscribe();
   }

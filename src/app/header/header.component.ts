@@ -16,7 +16,6 @@ import {catchError, Observable, of, tap} from "rxjs";
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  hasAuthenticated = false;
   user: User | undefined;
   auth: AuthenticationService = inject(AuthenticationService);
 
@@ -24,22 +23,19 @@ export class HeaderComponent {
   }
 
   ngOnInit() {
-    this.auth.authenticate()
-      .pipe(
-        tap(_ => this.hasAuthenticated = true),
-        catchError(this.handleError<User | undefined>("login"))
-      ).subscribe(user => {
+    this.auth.authenticate().subscribe(user => {
         this.user = user;
     })
   }
 
   logout() {
-    this.auth.logout();
+    this.auth.logout().subscribe();
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      this.hasAuthenticated = false;
+      console.log("can't authenticate");
+      console.error(error)
       return of(result as T);
     }
   }

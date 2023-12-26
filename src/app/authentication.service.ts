@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
   providedIn: 'root'
 })
 export class AuthenticationService {
+  hasAuthenticated = false;
   url = "http://localhost:8080/auth/login";
 
   constructor(private http: HttpClient, private router: Router) {
@@ -21,7 +22,11 @@ export class AuthenticationService {
     const header = new HttpHeaders();
     header.append("Content-Type", "application/json");
 
-    return this.http.post<User | undefined>(this.url, {username: username, password: password}, {headers: header});
+    return this.http.post<User | undefined>(this.url, {username: username, password: password}, {headers: header})
+      .pipe(
+        tap(_ => this.hasAuthenticated = true),
+        catchError(this.handleError("auth", undefined))
+      );
   }
 
   getHeader(): { authorization: string} {
@@ -36,13 +41,17 @@ export class AuthenticationService {
         tap(_ => {
           localStorage.removeItem("username");
           localStorage.removeItem("password");
+
+        }),
+        tap(_ => {
+          this.authenticate().subscribe();
         })
       );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(error);
+      this.hasAuthenticated = false;
       return of(result as T);
     }
   }
