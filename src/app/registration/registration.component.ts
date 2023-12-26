@@ -5,6 +5,8 @@ import {CountryService} from "../country.service";
 import {Country} from "../country";
 import {RegistrationService} from "../registration.service";
 import {Router} from "@angular/router";
+import {catchError, Observable, of, pipe, tap} from "rxjs";
+import {AuthenticationService} from "../authentication.service";
 
 @Component({
   selector: 'app-registration',
@@ -30,6 +32,7 @@ export class RegistrationComponent {
   countries: Country[] = [];
 
   constructor(
+    private auth: AuthenticationService,
     private registrationService: RegistrationService,
     private router: Router) {
   }
@@ -49,7 +52,23 @@ export class RegistrationComponent {
       maritalStatus: this.registrationForm.value.maritalStatus,
       country: this.registrationForm.value.country
     }
-    this.registrationService.registerUser(registrationData);
-    this.router.navigateByUrl("/").then();
+    this.registrationService.registerUser(registrationData)
+      .pipe(
+        catchError(this.handleError("registration"))
+      )
+      .subscribe(_ => {
+      localStorage.setItem("username", registrationData.username);
+      localStorage.setItem("password", registrationData.password);
+      this.auth.authenticate().subscribe(_ => {
+        this.router.navigateByUrl("/").then();
+      });
+    });
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      return of(result as T);
+    }
   }
 }
