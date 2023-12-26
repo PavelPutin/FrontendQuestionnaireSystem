@@ -14,7 +14,7 @@ import {AuthenticationService} from "./authentication.service";
 export class QuestionnaireService {
   url = 'http://localhost:8080/questionnaire'
   router: Router = inject(Router);
-  authenticationService: AuthenticationService = inject(AuthenticationService);
+  auth: AuthenticationService = inject(AuthenticationService);
   constructor(private http: HttpClient) { }
 
   async getQuestionnaires(pageNumber: number, questionnaireNameSearch: string | undefined, authorNameSearch: string | undefined): Promise<PaginatedQuestionnaires> {
@@ -38,20 +38,26 @@ export class QuestionnaireService {
 
   async getQuestionnaireById(uuid: string): Promise<Questionnaire> {
     const data = await fetch(`${this.url}/${uuid}`, {
-      headers: this.authenticationService.authorizationHeader
+      headers: this.auth.getHeader()
     });
     if (data.status == 404) {
       this.router.navigate(["/details", uuid, "notfound"]).then();
+    }
+    if (data.status == 401) {
+      this.router.navigateByUrl("/login").then();
     }
     return await data.json() ?? [];
   }
 
   async getHasUserAnsweredByQuestionnaireId(uuid: string): Promise<{ result: boolean }> {
     const data = await fetch(`${this.url}/${uuid}/hasAnswered`, {
-      headers: this.authenticationService.authorizationHeader
+      headers: this.auth.getHeader()
     });
     if (data.status == 404) {
       this.router.navigate(["/details", uuid, "notfound"]).then();
+    }
+    if (data.status == 401) {
+      this.router.navigateByUrl("/login").then();
     }
     return await data.json() ?? undefined;
   }

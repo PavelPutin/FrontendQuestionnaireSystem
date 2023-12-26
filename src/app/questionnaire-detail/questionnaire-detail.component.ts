@@ -4,6 +4,8 @@ import {QuestionnaireService} from "../questionnaire.service";
 import {Questionnaire} from "../questionnaire";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AuthenticationService} from "../authentication.service";
+import {catchError, Observable, of} from "rxjs";
 
 @Component({
   selector: 'app-questionnaire-detail',
@@ -21,6 +23,7 @@ export class QuestionnaireDetailComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   questionnaireService: QuestionnaireService = inject(QuestionnaireService);
   formBuilder: FormBuilder = inject(FormBuilder);
+  auth: AuthenticationService = inject(AuthenticationService);
 
   questionnaire: Questionnaire | undefined;
   hasAnswered: boolean = false;
@@ -33,24 +36,30 @@ export class QuestionnaireDetailComponent {
   }
 
   ngOnInit() {
-    this.questionnaireService.getHasUserAnsweredByQuestionnaireId(this.questionnaireId).then(result => {
-      this.hasAnswered = result.result ? result.result : false;
-      this.questionnaireService.getQuestionnaireById(this.questionnaireId).then(questionnaire => {
-        this.questionnaire = questionnaire;
-        if (this.questionnaire?.multiple) {
-          this.optionsFormGroup = this.formBuilder.group({
-            options: this.formBuilder.array([], Validators.required)
-          });
-        } else {
-          this.optionsFormGroup = new FormGroup<any>({
-            options: new FormControl()
-          });
-          if (this.hasAnswered) {
-            this.optionsFormGroup.controls["options"].disable();
+    this.auth.authenticate()
+      .pipe(
+        catchError(this.handleError("getQuestionnaireDetails"))
+      ).subscribe(_ => {
+        this.questionnaireService.getHasUserAnsweredByQuestionnaireId(this.questionnaireId).then(result => {
+        this.hasAnswered = result.result ? result.result : false;
+        this.questionnaireService.getQuestionnaireById(this.questionnaireId).then(questionnaire => {
+          this.questionnaire = questionnaire;
+          if (this.questionnaire?.multiple) {
+            this.optionsFormGroup = this.formBuilder.group({
+              options: this.formBuilder.array([], Validators.required)
+            });
+          } else {
+            this.optionsFormGroup = new FormGroup<any>({
+              options: new FormControl()
+            });
+            if (this.hasAnswered) {
+              this.optionsFormGroup.controls["options"].disable();
+            }
           }
-        }
+        });
       });
     });
+
   }
 
   submitVote() {
@@ -74,6 +83,13 @@ export class QuestionnaireDetailComponent {
       // @ts-ignore
       const index = options.controls.findIndex(option => option.value === e.target.value);
       optionsArray.removeAt(index);
+    }
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      this.router.navigateByUrl("/login").then();
+      return of(result as T);
     }
   }
 }
