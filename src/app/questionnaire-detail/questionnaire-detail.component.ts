@@ -20,34 +20,36 @@ import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Val
 export class QuestionnaireDetailComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   questionnaireService: QuestionnaireService = inject(QuestionnaireService);
-  questionnaire: Questionnaire | undefined;
-  hasAnswered: boolean;
-  optionsFormGroup: FormGroup;
   formBuilder: FormBuilder = inject(FormBuilder);
+
+  questionnaire: Questionnaire | undefined;
+  hasAnswered: boolean = false;
+  optionsFormGroup: FormGroup;
   questionnaireId: string;
 
   constructor(private router: Router) {
     this.optionsFormGroup = new FormGroup<any>({});
     this.questionnaireId = this.route.snapshot.params['id'];
-    this.questionnaireService.getQuestionnaireById(this.questionnaireId).then(questionnaire => {
-      this.questionnaire = questionnaire;
-      console.log(this.questionnaire?.multiple)
-      if (this.questionnaire?.multiple) {
-        this.optionsFormGroup = this.formBuilder.group({
-          options: this.formBuilder.array([], Validators.required)
-        });
-      } else {
-        this.optionsFormGroup = new FormGroup<any>({
-          options: new FormControl()
-        });
-        if (this.hasAnswered) {
-          this.optionsFormGroup.controls["options"].disable();
-        }
-      }
-    });
-    this.hasAnswered = false
+  }
+
+  ngOnInit() {
     this.questionnaireService.getHasUserAnsweredByQuestionnaireId(this.questionnaireId).then(result => {
       this.hasAnswered = result.result ? result.result : false;
+      this.questionnaireService.getQuestionnaireById(this.questionnaireId).then(questionnaire => {
+        this.questionnaire = questionnaire;
+        if (this.questionnaire?.multiple) {
+          this.optionsFormGroup = this.formBuilder.group({
+            options: this.formBuilder.array([], Validators.required)
+          });
+        } else {
+          this.optionsFormGroup = new FormGroup<any>({
+            options: new FormControl()
+          });
+          if (this.hasAnswered) {
+            this.optionsFormGroup.controls["options"].disable();
+          }
+        }
+      });
     });
   }
 
