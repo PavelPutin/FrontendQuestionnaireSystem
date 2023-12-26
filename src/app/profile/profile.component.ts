@@ -160,6 +160,17 @@ export class ProfileComponent {
     this.creation = false;
   }
 
+  delete(uuid: string) {
+    this.questionnaireService.delete(uuid)
+      .pipe(
+        tap(_ => {
+          this.selected = undefined;
+          let pageNumber = this.setPageNumber();
+          this.getQuestionnaires(pageNumber);
+        })
+      ).subscribe();
+  }
+
   private updatePaginationLabels(questionnaires: PaginatedQuestionnaires): string[] {
     let paginationLabels: string[] = [];
     if (questionnaires.number < 5) {

@@ -74,4 +74,8 @@ export class QuestionnaireService {
   create(body: any) {
     return this.http.post<Questionnaire>(`${this.url}`, body, {headers: this.auth.getHeader()})
   }
+
+  delete(uuid: string): Observable<any> {
+    return this.http.delete(`${this.url}/${uuid}`, {headers: this.auth.getHeader()});
+  }
 }

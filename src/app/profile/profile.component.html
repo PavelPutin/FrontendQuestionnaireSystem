@@ -100,6 +100,7 @@
               <b>{{option?.text}}</b>: <i>Проголосовало</i> {{option?.choicesAmount}}
             </li>
           </ul>
+          <button type="button" (click)="delete(selected.id)">Удалить</button>
         </div>
       </div>
 
