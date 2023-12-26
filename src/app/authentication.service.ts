@@ -8,9 +8,6 @@ import {Router} from "@angular/router";
   providedIn: 'root'
 })
 export class AuthenticationService {
-  hasAuthenticated: boolean = false;
-  loggedInUser: User | undefined;
-  authorizationHeader: {authorization: string} | undefined = undefined;
   url = "http://localhost:8080/auth/login";
 
   constructor(private http: HttpClient, private router: Router) {
@@ -24,38 +21,28 @@ export class AuthenticationService {
     const header = new HttpHeaders();
     header.append("Content-Type", "application/json");
 
-    if (username !== null && password !== null) {
-      this.http.post<User>(this.url, {username: username, password: password}, {headers: header})
-        .pipe(
-          tap(_ => {
-            this.hasAuthenticated = true;
-            this.authorizationHeader = {authorization: "Basic " + btoa(username + ":" + password)};
-            if (typeof redirect !== "undefined") {
-              this.router.navigateByUrl(redirect).then();
-            }
-          }),
-          catchError(this.handleError<any>("login"))
-        ).subscribe(user => this.loggedInUser = user);
-    } else {
-      this.hasAuthenticated = false;
-    }
+    return this.http.post<User>(this.url, {username: username, password: password}, {headers: header})
+  }
+
+  getHeader(): { authorization: string} {
+    const username = localStorage.getItem("username");
+    const password = localStorage.getItem("password");
+    return {authorization: "Basic " + btoa(username + ":" + password)};
   }
 
   logout() {
-    this.http.post("http://localhost:8080/auth/logout", {}, {headers: this.authorizationHeader}).subscribe(
-      _ => {
-        localStorage.removeItem("username");
-        localStorage.removeItem("password");
-        this.hasAuthenticated = false;
-        this.router.navigateByUrl("/login").then();
-      }
-    );
+    return this.http.post("http://localhost:8080/auth/logout", {}, {headers: this.getHeader()})
+      .pipe(
+        tap(_ => {
+          localStorage.removeItem("username");
+          localStorage.removeItem("password");
+        })
+      );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-      this.hasAuthenticated = false;
       return of(result as T);
     }
   }
