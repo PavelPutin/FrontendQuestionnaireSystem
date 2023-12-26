@@ -19,7 +19,7 @@ export class HeaderComponent {
   user: User | undefined;
   auth: AuthenticationService = inject(AuthenticationService);
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   ngOnInit() {
@@ -29,7 +29,9 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.auth.logout().subscribe();
+    this.auth.logout().subscribe(_ =>
+      this.router.navigateByUrl("/").then()
+    );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
