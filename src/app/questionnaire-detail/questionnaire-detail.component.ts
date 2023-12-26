@@ -5,7 +5,7 @@ import {Questionnaire} from "../questionnaire";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthenticationService} from "../authentication.service";
-import {catchError, Observable, of} from "rxjs";
+import {catchError, Observable, of, tap} from "rxjs";
 
 @Component({
   selector: 'app-questionnaire-detail',
@@ -38,27 +38,28 @@ export class QuestionnaireDetailComponent {
   ngOnInit() {
     this.auth.authenticate()
       .pipe(
+        tap(_ => {
+          this.questionnaireService.getHasUserAnsweredByQuestionnaireId(this.questionnaireId).then(result => {
+            this.hasAnswered = result.result ? result.result : false;
+            this.questionnaireService.getQuestionnaireById(this.questionnaireId).then(questionnaire => {
+              this.questionnaire = questionnaire;
+              if (this.questionnaire?.multiple) {
+                this.optionsFormGroup = this.formBuilder.group({
+                  options: this.formBuilder.array([], Validators.required)
+                });
+              } else {
+                this.optionsFormGroup = new FormGroup<any>({
+                  options: new FormControl()
+                });
+                if (this.hasAnswered) {
+                  this.optionsFormGroup.controls["options"].disable();
+                }
+              }
+            });
+          });
+        }),
         catchError(this.handleError("getQuestionnaireDetails"))
-      ).subscribe(_ => {
-        this.questionnaireService.getHasUserAnsweredByQuestionnaireId(this.questionnaireId).then(result => {
-        this.hasAnswered = result.result ? result.result : false;
-        this.questionnaireService.getQuestionnaireById(this.questionnaireId).then(questionnaire => {
-          this.questionnaire = questionnaire;
-          if (this.questionnaire?.multiple) {
-            this.optionsFormGroup = this.formBuilder.group({
-              options: this.formBuilder.array([], Validators.required)
-            });
-          } else {
-            this.optionsFormGroup = new FormGroup<any>({
-              options: new FormControl()
-            });
-            if (this.hasAnswered) {
-              this.optionsFormGroup.controls["options"].disable();
-            }
-          }
-        });
-      });
-    });
+      ).subscribe();
 
   }
 

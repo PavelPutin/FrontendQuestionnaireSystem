@@ -123,11 +123,11 @@ export class ProfileComponent {
         gender: this.editProfileForm.value.gender,
         maritalStatus: this.editProfileForm.value.maritalStatus,
         country: this.editProfileForm.value.country
-      }).subscribe(user => {
+      }).pipe(tap(user => {
         this.user = user;
         this.isEditing = false;
         this.setDefaultFormControlsValue();
-      });
+      })).subscribe();
     }
   }
 

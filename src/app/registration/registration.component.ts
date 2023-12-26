@@ -54,15 +54,16 @@ export class RegistrationComponent {
     }
     this.registrationService.registerUser(registrationData)
       .pipe(
+        tap(_ => {
+          localStorage.setItem("username", registrationData.username);
+          localStorage.setItem("password", registrationData.password);
+          this.auth.authenticate().subscribe(_ => {
+            this.router.navigateByUrl("/").then();
+          });
+        }),
         catchError(this.handleError("registration"))
       )
-      .subscribe(_ => {
-      localStorage.setItem("username", registrationData.username);
-      localStorage.setItem("password", registrationData.password);
-      this.auth.authenticate().subscribe(_ => {
-        this.router.navigateByUrl("/").then();
-      });
-    });
+      .subscribe();
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

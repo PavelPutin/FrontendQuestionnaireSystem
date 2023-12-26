@@ -3,7 +3,7 @@ import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AuthenticationService} from "../authentication.service";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {catchError, Observable, of} from "rxjs";
+import {catchError, Observable, of, tap} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -29,10 +29,9 @@ export class LoginComponent {
     localStorage.setItem("password", this.loginForm.value.password);
     this.auth.authenticate()
       .pipe(
+        tap(_ => this.router.navigateByUrl("/").then()),
         catchError(this.handleError("login"))
-      ).subscribe(_ => {
-        this.router.navigateByUrl("/").then();
-    });
+      ).subscribe();
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
