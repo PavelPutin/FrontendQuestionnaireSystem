@@ -154,7 +154,10 @@ export class ProfileComponent {
 
   startCreation() {
     this.creation = true;
-    this.selected = undefined;
+  }
+
+  cancelCreation() {
+    this.creation = false;
   }
 
   private updatePaginationLabels(questionnaires: PaginatedQuestionnaires): string[] {

@@ -16,6 +16,7 @@ import {tap} from "rxjs";
 })
 export class QuestionnaireCreationComponent {
   @Output() created = new EventEmitter();
+  @Output() cancelCreation = new EventEmitter();
   questionnaireService: QuestionnaireService = inject(QuestionnaireService);
   creationForm = new FormGroup({
     name: new FormControl(),
@@ -66,5 +67,9 @@ export class QuestionnaireCreationComponent {
     if (option.length !== 1) {
       option.removeAt(index);
     }
+  }
+
+  cancel() {
+    this.cancelCreation.emit();
   }
 }
