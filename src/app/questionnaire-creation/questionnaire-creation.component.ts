@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {NgForOf} from "@angular/common";
+import {QuestionnaireService} from "../questionnaire.service";
+import {tap} from "rxjs";
 
 @Component({
   selector: 'app-questionnaire-creation',
@@ -13,15 +15,27 @@ import {NgForOf} from "@angular/common";
   styleUrl: './questionnaire-creation.component.css'
 })
 export class QuestionnaireCreationComponent {
+  questionnaireService: QuestionnaireService = inject(QuestionnaireService);
   creationForm = new FormGroup({
-    title: new FormControl(), // must map to 'name'
+    name: new FormControl(),
     question: new FormControl(),
-    multiple: new FormControl(),
+    multiple: new FormControl(false),
     options: new FormArray([new FormControl("")])
   })
 
   submitCreation() {
-    console.log(this.creationForm.value);
+    let options = [];
+    // @ts-ignore
+    for (let value of this.creationForm.value.options) {
+      options.push({text: value})
+    }
+    let body = {
+      name: this.creationForm.value.name,
+      question: this.creationForm.value.question,
+      multiple: this.creationForm.value.multiple,
+      options: options
+    }
+    this.questionnaireService.create(body).subscribe();
   }
 
   addOption() {
@@ -46,6 +60,4 @@ export class QuestionnaireCreationComponent {
       option.removeAt(index);
     }
   }
-
-  protected readonly FormControl = FormControl;
 }

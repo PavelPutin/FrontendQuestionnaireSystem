@@ -63,17 +63,7 @@ export class ProfileComponent {
   paginationLabels: string[] = [];
   creation = false;
 
-  constructor(private userService: UserService) {
-    let userId = this.route.snapshot.params['id'];
-    // this.userService.getById(userId).subscribe(user => {
-    //   this.user = user;
-    //   if (typeof user !== "undefined") {
-    //     // @ts-ignore
-    //     this.maritalStatus = this.internalizationMaritalStatus[user.gender][user.maritalStatus];
-    //     this.setDefaultFormControlsValue();
-    //   }
-    // });
-  }
+  constructor(private userService: UserService) {}
 
   ngOnInit() {
     this.auth.authenticate()

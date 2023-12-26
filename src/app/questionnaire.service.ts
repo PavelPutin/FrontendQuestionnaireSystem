@@ -70,4 +70,8 @@ export class QuestionnaireService {
       "optionsId": optionsId
     }, httpOptions);
   }
+
+  create(body: any) {
+    return this.http.post<Questionnaire>(`${this.url}`, body, {headers: this.auth.getHeader()})
+  }
 }

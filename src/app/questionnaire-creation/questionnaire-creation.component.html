@@ -1,12 +1,12 @@
 <form [formGroup]="creationForm" (submit)="submitCreation()">
   <div>
-    <label for="title">Название:</label>
-    <input type="text" id="title" formControlName="title">
+    <label for="name">Название:</label>
+    <input type="text" id="name" formControlName="name" required>
   </div>
 
   <div>
     <label for="question">Описание анкеты:</label>
-    <textarea id="question" formControlName="question"></textarea>
+    <textarea id="question" formControlName="question" required></textarea>
   </div>
 
   <div>
