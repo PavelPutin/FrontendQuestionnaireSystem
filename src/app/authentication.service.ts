@@ -21,7 +21,7 @@ export class AuthenticationService {
     const header = new HttpHeaders();
     header.append("Content-Type", "application/json");
 
-    return this.http.post<User>(this.url, {username: username, password: password}, {headers: header})
+    return this.http.post<User>(this.url, {username: username, password: password}, {headers: header});
   }
 
   getHeader(): { authorization: string} {
