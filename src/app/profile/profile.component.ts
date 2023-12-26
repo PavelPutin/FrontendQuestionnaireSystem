@@ -108,6 +108,12 @@ export class ProfileComponent {
     this.setDefaultFormControlsValue();
   }
 
+  onCreated() {
+    this.creation = false;
+    let pageNumber = this.setPageNumber();
+    this.getQuestionnaires(pageNumber);
+  }
+
   private setDefaultFormControlsValue() {
     if (typeof this.user !== "undefined") {
       this.editProfileForm.controls["age"].setValue(this.user.age);

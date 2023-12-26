@@ -103,7 +103,7 @@
         </div>
       </div>
 
-      <app-questionnaire-creation *ngIf="creation"></app-questionnaire-creation>
+      <app-questionnaire-creation *ngIf="creation" (created)="onCreated()"></app-questionnaire-creation>
     </div>
   </div>
 </div>

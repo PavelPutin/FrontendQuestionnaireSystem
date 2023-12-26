@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, EventEmitter, inject, Output} from '@angular/core';
 import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 import {QuestionnaireService} from "../questionnaire.service";
@@ -15,6 +15,7 @@ import {tap} from "rxjs";
   styleUrl: './questionnaire-creation.component.css'
 })
 export class QuestionnaireCreationComponent {
+  @Output() created = new EventEmitter();
   questionnaireService: QuestionnaireService = inject(QuestionnaireService);
   creationForm = new FormGroup({
     name: new FormControl(),
@@ -35,7 +36,13 @@ export class QuestionnaireCreationComponent {
       multiple: this.creationForm.value.multiple,
       options: options
     }
-    this.questionnaireService.create(body).subscribe();
+    this.questionnaireService.create(body)
+      .pipe(
+        tap(_ => {
+          this.created.emit()
+        })
+      )
+      .subscribe();
   }
 
   addOption() {
