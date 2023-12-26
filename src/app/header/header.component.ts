@@ -3,7 +3,7 @@ import {Router, RouterLink} from "@angular/router";
 import {AuthenticationService} from "../authentication.service";
 import {NgIf} from "@angular/common";
 import {User} from "../user";
-import {catchError, Observable, of} from "rxjs";
+import {catchError, Observable, of, tap} from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -25,11 +25,11 @@ export class HeaderComponent {
 
   ngOnInit() {
     this.auth.authenticate()
-      .pipe<User | undefined>(
-        catchError(this.handleError("login", undefined))
+      .pipe(
+        tap(_ => this.hasAuthenticated = true),
+        catchError(this.handleError<User | undefined>("login"))
       ).subscribe(user => {
         this.user = user;
-        this.hasAuthenticated = true;
     })
   }
 
