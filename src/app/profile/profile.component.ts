@@ -77,6 +77,12 @@ export class ProfileComponent {
       ).subscribe(user => {
         this.user = user;
 
+        if (typeof user !== "undefined") {
+          // @ts-ignore
+          this.maritalStatus = this.internalizationMaritalStatus[user.gender][user.maritalStatus];
+          this.setDefaultFormControlsValue();
+        }
+
         let pageNumber = this.setPageNumber();
         this.getQuestionnaires(pageNumber);
 
@@ -124,10 +130,18 @@ export class ProfileComponent {
         maritalStatus: this.editProfileForm.value.maritalStatus,
         country: this.editProfileForm.value.country
       }).pipe(tap(user => {
-        this.user = user;
         this.isEditing = false;
-        this.setDefaultFormControlsValue();
-      })).subscribe();
+      })).subscribe(_ => {
+        this.auth.authenticate()
+          .subscribe(user => {
+            this.user = user;
+            if (typeof user !== "undefined") {
+              // @ts-ignore
+              this.maritalStatus = this.internalizationMaritalStatus[user.gender][user.maritalStatus];
+              this.setDefaultFormControlsValue();
+            }
+          });
+      });
     }
   }
 
