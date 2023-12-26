@@ -3,6 +3,7 @@ import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AuthenticationService} from "../authentication.service";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {catchError, Observable, of} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -19,13 +20,25 @@ export class LoginComponent {
     password: new FormControl()
   });
 
-  authenticationService: AuthenticationService = inject(AuthenticationService);
+  auth: AuthenticationService = inject(AuthenticationService);
   http: HttpClient = inject(HttpClient);
   router: Router = inject(Router);
 
   login() {
     localStorage.setItem("username", this.loginForm.value.username);
     localStorage.setItem("password", this.loginForm.value.password);
-    this.authenticationService.authenticate("/");
+    this.auth.authenticate()
+      .pipe(
+        catchError(this.handleError("login"))
+      ).subscribe(_ => {
+        this.router.navigateByUrl("/").then();
+    });
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      return of(result as T);
+    }
   }
 }
