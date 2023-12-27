@@ -3,10 +3,10 @@
     <app-popular></app-popular>
   </div>
   <div class="col-8">
-    <form class="bg-light p-2" [formGroup]="searchFormGroup"  (submit)="acceptFilter()">
+    <form class="bg-light p-2 d-flex" [formGroup]="searchFormGroup"  (submit)="acceptFilter()">
       <input class="form-control me-2" type="text" placeholder="Заголовок опроса" formControlName="questionnaireNameSearch">
-      <input class="form-control" type="text" placeholder="Имя автора" formControlName="authorNameSearch">
-      <button type="submit">
+      <input class="form-control me-2" type="text" placeholder="Имя автора" formControlName="authorNameSearch">
+      <button type="submit" class="btn btn-outline-dark">
         <i class="bi bi-search"></i>
       </button>
     </form>
