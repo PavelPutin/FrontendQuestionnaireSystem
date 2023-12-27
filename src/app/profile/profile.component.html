@@ -69,15 +69,15 @@
         </ul>
         <nav aria-label="Page navigation example">
           <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <button class="page-link bi bi-arrow-left" type="button" aria-label="Previous"></button>
-            </li>
+<!--            <li class="page-item">-->
+<!--              <button class="page-link bi bi-arrow-left" type="button" aria-label="Previous"></button>-->
+<!--            </li>-->
             <li class="page-item" *ngFor="let paginationLabel of paginationLabels">
               <button (click)="getQuestionnaires(Number.parseInt(paginationLabel) - 1)" class="page-link" type="button">{{paginationLabel}}</button>
             </li>
-            <li class="page-item">
-              <button class="page-link bi bi-arrow-right" type="button" aria-label="Next"></button>
-            </li>
+<!--            <li class="page-item">-->
+<!--              <button class="page-link bi bi-arrow-right" type="button" aria-label="Next"></button>-->
+<!--            </li>-->
           </ul>
         </nav>
 
@@ -100,7 +100,7 @@
               <b>{{option?.text}}</b>: <i>Проголосовало</i> {{option?.choicesAmount}}
             </li>
           </ul>
-          <button type="button" (click)="delete(selected.id)">Удалить</button>
+          <button class="btn btn-outline-danger" type="button" (click)="delete(selected.id)">Удалить</button>
         </div>
       </div>
 

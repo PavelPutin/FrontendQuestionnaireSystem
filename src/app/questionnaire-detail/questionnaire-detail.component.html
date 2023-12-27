@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-7 bg-light">
       <h1>{{questionnaire?.name}}</h1>
-      <p>Автор: <a [routerLink]="['/profile', questionnaire?.authorId]">{{questionnaire?.authorName}}</a></p>
+      <p>Автор: <i>{{questionnaire?.authorName}}</i></p>
       <p>{{questionnaire?.question}}</p>
     </div>
     <div class="col-5 bg-light">
