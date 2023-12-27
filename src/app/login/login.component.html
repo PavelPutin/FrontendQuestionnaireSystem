@@ -6,10 +6,10 @@
     </h3>
     <form [formGroup]="loginForm" class="d-flex flex-column align-items-center" (submit)="login()">
       <div>
-        <input class="mb-2" type="text" formControlName="username" placeholder="Имя пользователя">
+        <input class="form-control mb-2" type="text" formControlName="username" placeholder="Имя пользователя">
       </div>
       <div>
-        <input class="mb-2" type="password" formControlName="password" placeholder="Пароль">
+        <input class="form-control mb-2" type="password" formControlName="password" placeholder="Пароль">
       </div>
       <div>
         <input class="btn btn-light border border-primary" type="submit" value="Вход">

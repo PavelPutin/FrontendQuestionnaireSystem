@@ -12,13 +12,13 @@
         <div *ngIf="questionnaire?.multiple">
           <div *ngFor="let option of questionnaire?.options">
             <input type="checkbox" id="option{{option.id}}" [value]="option.id" [disabled]="hasAnswered" (change)="controlOnChange($event)">
-            <label for="option{{option.id}}">{{option.text}}</label>
+            <label class="form-label" for="option{{option.id}}">{{option.text}}</label>
           </div>
         </div>
         <div *ngIf="!questionnaire?.multiple">
           <div *ngFor="let option of questionnaire?.options">
             <input type="radio" id="option{{option.id}}" formControlName="options" [value]="option.id">
-            <label for="option{{option.id}}">{{option.text}}</label>
+            <label class="form-label" for="option{{option.id}}">{{option.text}}</label>
           </div>
         </div>
         <button type="submit" [disabled]="hasAnswered">Проголосовать</button>

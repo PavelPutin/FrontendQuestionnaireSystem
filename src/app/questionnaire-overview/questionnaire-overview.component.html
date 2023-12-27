@@ -4,8 +4,8 @@
   </div>
   <div class="col-8">
     <form class="bg-light p-2" [formGroup]="searchFormGroup"  (submit)="acceptFilter()">
-      <input type="text" placeholder="Заголовок опроса" formControlName="questionnaireNameSearch">
-      <input type="text" placeholder="Имя автора" formControlName="authorNameSearch">
+      <input class="form-control me-2" type="text" placeholder="Заголовок опроса" formControlName="questionnaireNameSearch">
+      <input class="form-control" type="text" placeholder="Имя автора" formControlName="authorNameSearch">
       <button type="submit">
         <i class="bi bi-search"></i>
       </button>

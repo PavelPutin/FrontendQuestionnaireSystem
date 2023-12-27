@@ -1,24 +1,24 @@
 <form [formGroup]="creationForm" (submit)="submitCreation()">
   <div>
-    <label for="name">Название:</label>
-    <input type="text" id="name" formControlName="name" required>
+    <label class="form-label" for="name">Название:</label>
+    <input class="form-control" type="text" id="name" formControlName="name" required>
   </div>
 
   <div>
-    <label for="question">Описание анкеты:</label>
-    <textarea id="question" formControlName="question" required></textarea>
+    <label class="form-label" for="question">Описание анкеты:</label>
+    <textarea class="form-control" id="question" formControlName="question" required></textarea>
   </div>
 
   <div>
-    <label for="multiple">Можно выбрать несколько вариантов: </label>
+    <label class="form-label" for="multiple">Можно выбрать несколько вариантов: </label>
     <input type="checkbox" formControlName="multiple" id="multiple">
   </div>
 
   <div>
     <div>Варианты ответов</div>
     <div *ngFor="let optionControl of this.creationForm.value.options; index as i">
-      <label for="option{{i}}">{{i + 1}}:</label>
-      <input type="text" id="option{{i}}" (change)="changeOptionControl(i, $event)" value="{{getValueFor(i)}}">
+      <label class="form-label" for="option{{i}}">{{i + 1}}:</label>
+      <input class="form-control mh-2" type="text" id="option{{i}}" (change)="changeOptionControl(i, $event)" value="{{getValueFor(i)}}">
       <button type="button" class="btn btn-outline-danger" (click)="removeOption(i)">Убрать</button>
     </div>
     <button type="button" class="btn btn-outline-info" (click)="addOption()">Добавить вариант</button>

@@ -13,30 +13,30 @@
 
         <form [formGroup]="editProfileForm" [hidden]="!isEditing" (submit)="submitUpdate()">
           <div>
-            <label for="age">Возраст:</label>
-            <input type="number" formControlName="age" id="age" min="1" required>
+            <label class="form-label" for="age">Возраст:</label>
+            <input class="formcontrol" type="number" formControlName="age" id="age" min="1" required>
           </div>
           <fieldset>
             <legend>Пол:</legend>
             <div>
               <input type="radio" formControlName="gender" id="female" value="female" required>
-              <label for="female">Женский</label>
+              <label class="form-label" for="female">Женский</label>
 
               <input type="radio" formControlName="gender" id="male" value="male" required>
-              <label for="male">Мужской</label>
+              <label class="form-label" for="male">Мужской</label>
             </div>
           </fieldset>
           <fieldset>
             <legend>Семейное положение:</legend>
             <div>
               <input type="radio" formControlName="maritalStatus" id="married" value="married" required>
-              <label for="married">Замужем</label>
+              <label class="form-label" for="married">Замужем</label>
 
               <input type="radio" formControlName="maritalStatus" id="divorced" value="divorced" required>
-              <label for="divorced">Разведён</label>
+              <label class="form-label" for="divorced">Разведён</label>
 
               <input type="radio" formControlName="maritalStatus" id="was_not_married" value="was_not_married" required>
-              <label for="was_not_married">Не был женат</label>
+              <label class="form-label" for="was_not_married">Не был женат</label>
             </div>
           </fieldset>
           <div>
