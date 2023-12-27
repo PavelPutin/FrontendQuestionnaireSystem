@@ -10,18 +10,18 @@
       <h2 *ngIf="hasAnswered">Вы уже проголосовали</h2>
       <form [formGroup]="optionsFormGroup" (submit)="submitVote()">
         <div *ngIf="questionnaire?.multiple">
-          <div *ngFor="let option of questionnaire?.options">
-            <input type="checkbox" id="option{{option.id}}" [value]="option.id" [disabled]="hasAnswered" (change)="controlOnChange($event)">
-            <label class="form-label" for="option{{option.id}}">{{option.text}}</label>
+          <div class="form-check" *ngFor="let option of questionnaire?.options">
+            <input class="form-check-input" type="checkbox" id="option{{option.id}}" [value]="option.id" [disabled]="hasAnswered" (change)="controlOnChange($event)">
+            <label class="form-check-label" for="option{{option.id}}">{{option.text}}</label>
           </div>
         </div>
         <div *ngIf="!questionnaire?.multiple">
-          <div *ngFor="let option of questionnaire?.options">
-            <input type="radio" id="option{{option.id}}" formControlName="options" [value]="option.id">
-            <label class="form-label" for="option{{option.id}}">{{option.text}}</label>
+          <div class="form-check" *ngFor="let option of questionnaire?.options">
+            <input class="form-check-input" type="radio" id="option{{option.id}}" formControlName="options" [value]="option.id">
+            <label class="form-check-label" for="option{{option.id}}">{{option.text}}</label>
           </div>
         </div>
-        <button type="submit" [disabled]="hasAnswered">Проголосовать</button>
+        <button class="btn btn-outline-info" type="submit" [disabled]="hasAnswered">Проголосовать</button>
       </form>
     </div>
   </div>

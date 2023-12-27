@@ -9,9 +9,9 @@
     <textarea class="form-control" id="question" formControlName="question" required></textarea>
   </div>
 
-  <div>
-    <label class="form-label" for="multiple">Можно выбрать несколько вариантов: </label>
-    <input type="checkbox" formControlName="multiple" id="multiple">
+  <div class="form-check form-switch">
+    <label class="form-check-label" for="multiple">Можно выбрать несколько вариантов: </label>
+    <input class="form-check-input" role="switch" type="checkbox" formControlName="multiple" id="multiple">
   </div>
 
   <div class="mb-2">
@@ -19,7 +19,7 @@
     <div class="d-flex mb-1" *ngFor="let optionControl of this.creationForm.value.options; index as i">
       <div class="form-floating flex-fill me-1">
         <input class="form-control mh-2" type="text" id="option{{i}}" (change)="changeOptionControl(i, $event)" value="{{getValueFor(i)}}">
-        <label for="option{{i}}">Вариант {{i + 1}}</label>
+        <label  for="option{{i}}">Вариант {{i + 1}}</label>
       </div>
       <button type="button" class="btn btn-outline-danger" (click)="removeOption(i)">Убрать</button>
     </div>
