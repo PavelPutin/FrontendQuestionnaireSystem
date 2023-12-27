@@ -14,16 +14,18 @@
     <input type="checkbox" formControlName="multiple" id="multiple">
   </div>
 
-  <div>
+  <div class="mb-2">
     <div>Варианты ответов</div>
-    <div *ngFor="let optionControl of this.creationForm.value.options; index as i">
-      <label class="form-label" for="option{{i}}">{{i + 1}}:</label>
-      <input class="form-control mh-2" type="text" id="option{{i}}" (change)="changeOptionControl(i, $event)" value="{{getValueFor(i)}}">
+    <div class="d-flex mb-1" *ngFor="let optionControl of this.creationForm.value.options; index as i">
+      <div class="form-floating flex-fill me-1">
+        <input class="form-control mh-2" type="text" id="option{{i}}" (change)="changeOptionControl(i, $event)" value="{{getValueFor(i)}}">
+        <label for="option{{i}}">Вариант {{i + 1}}</label>
+      </div>
       <button type="button" class="btn btn-outline-danger" (click)="removeOption(i)">Убрать</button>
     </div>
     <button type="button" class="btn btn-outline-info" (click)="addOption()">Добавить вариант</button>
   </div>
 
-  <button type="submit">Создать анкету</button>
-  <button type="button" (click)="cancel()">Отмена</button>
+  <button class="btn btn-outline-success me-1" type="submit">Создать анкету</button>
+  <button class="btn btn-outline-danger" type="button" (click)="cancel()">Отмена</button>
 </form>

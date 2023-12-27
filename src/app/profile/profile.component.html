@@ -41,7 +41,7 @@
           </fieldset>
           <div>
             <div>Страна проживания:</div>
-            <select formControlName="country" id="country">
+            <select class="form-select" formControlName="country" id="country">
               <option *ngFor="let country of countries" value="{{country.id}}">
                 {{country.value}}
               </option>
