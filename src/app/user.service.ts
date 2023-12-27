@@ -3,12 +3,14 @@ import {HttpClient} from "@angular/common/http";
 import {catchError, Observable, of} from "rxjs";
 import {User} from "./user";
 import {AuthenticationService} from "./authentication.service";
+import {environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  url = "http://localhost:8080/user";
+  // url = "http://localhost:8080/user";
+  url = environment.backendUrl + "/user";
   auth: AuthenticationService = inject(AuthenticationService);
   constructor(
     private http: HttpClient

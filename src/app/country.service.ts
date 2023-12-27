@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {catchError, Observable, of} from "rxjs";
 import {Country} from "./country";
+import {environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CountryService {
-  url = "http://localhost:8080/country";
+  url = environment.backendUrl + "/country";
   constructor(private http: HttpClient) { }
 
   getCountries(): Observable<Country[]> {

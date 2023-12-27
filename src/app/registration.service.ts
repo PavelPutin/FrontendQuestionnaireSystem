@@ -3,12 +3,13 @@ import {RegistrationData} from "./registration-data";
 import {HttpClient} from "@angular/common/http";
 import {catchError, Observable, of, tap} from "rxjs";
 import {AuthenticationService} from "./authentication.service";
+import {environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegistrationService {
-  url = "http://localhost:8080/auth/registration";
+  url = environment.backendUrl + "/auth/registration";
   constructor(
     private http: HttpClient,
     private authenticationService: AuthenticationService

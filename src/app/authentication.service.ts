@@ -3,13 +3,14 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, Observable, of, Subscription, tap} from "rxjs";
 import {User} from "./user";
 import {Router} from "@angular/router";
+import {environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
   hasAuthenticated = false;
-  url = "http://localhost:8080/auth/login";
+  url = environment.backendUrl + "/auth/login";
 
   constructor(private http: HttpClient, private router: Router) {
     this.authenticate();
